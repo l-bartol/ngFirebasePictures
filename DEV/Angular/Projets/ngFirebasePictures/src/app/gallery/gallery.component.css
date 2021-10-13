@@ -1,0 +1,11 @@
+.cadrePhoto {
+  height:350px;
+}
+
+.clickPointer{
+  cursor:pointer;
+}
+
+.img-responsive {
+  display: inline-block;
+}

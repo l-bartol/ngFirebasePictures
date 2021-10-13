@@ -1,0 +1,74 @@
+<div class="container">
+  <div class="card">
+    <div class="card-header">Composant gallery avec bootstrap</div>
+    <div class="card-body">
+      <h3>Gallery</h3>
+      <form #formGallery="ngForm" (ngSubmit)="onSearch(formGallery.value)">
+        <div class="form-group">
+          <label class="control-label">Ident:&nbsp;</label>
+          <!-- Data Binding avec ident-->
+           <input type="password" required="" name="ident" ngModel [(ngModel)]="ident">
+          &nbsp;
+          <label class="control-label">Mot Clé:&nbsp;</label>
+          <!-- Data Binding avec motCle-->
+          <input type="text" required="" name="motCle" ngModel [(ngModel)]="motCle">
+          &nbsp;
+          <button type="submit" class="btn-xs btn-primary">Chercher</button>
+        </div>
+      </form>
+      <br *ngIf="selecteursPage.length>0">
+
+      <!-- Présenter les photos sur un ligne => raw" -->
+      <div class="row">
+        <!-- Faire la boucle que si pagePhotos est défini
+          3 possibilités :
+          1/ Encapsuler avec un div
+          <div *ngIf="pagePhotos"
+          2/ Ou typer pagePhotos dans gallery-bs.component.ts
+            pagePhotos:any={hits:[]}; // objet {} json contenant un mot clé "hits" qui est un tableau
+          3/ <div *ngForm="let page of pagePhotos?.hits">
+
+          Bootstrap permet de diviser en 12 colonnes
+          On va mettre 4 photos par ligne => 3 colonnes par photo
+          => class="col-md-3"
+        -->
+        <div *ngFor="let photo of pagePhotos?.hits" class="col-3">
+          <!-- Régler la hauteur des photos voir cadrePhoto dans le .css-->
+          <div class="card cadrePhoto">
+            <!-- Donner un titre exemple le nom du photographe -->
+            <div class="card-header">Tags : {{photo.tags}}</div>
+            <!-- text-center : pour centrer l'image horizontalement-->
+            <div class="card-body text-center">
+              <img class="img-responsive" src="{{photo.previewURL}}">
+            </div>
+            <div class="card-footer">By : {{photo.user}}</div>
+          </div>
+          <br>
+        </div>
+      </div>
+
+      <br *ngIf="selecteursPage.length>0">
+      <div *ngIf="selecteursPage.length>0" class="card">
+        <div class="card-header">Choisissez votre page :</div>
+        <!-- Transformer ul en barre de navigation => nav
+          Sur une seule ligne => nav-pills -->
+        <ul class="nav nav-pills">
+          <!-- Marquer la page selectionnée si numPage=(i+1)
+            Mettre une icon de pointage => class="clickPointer" voir css -->
+          <!-- Ne pas prendre la boucle met l'index de la boucle -->
+          <li [ngClass]="{'active':numPage==(i+1)}" class="clickPointer" *ngFor="let page of selecteursPage; let i=index">
+            <!-- Commencer la numérotation à 1 et non à 0 => {{i+1}}-->
+            <!--<a (click)="gotoPage(i+1)">{{i+1}}</a>-->
+            <button class="btn" (click)="gotoPage(i+1)">{{(i+1)}}</button>
+          </li>
+        </ul>
+      </div>
+
+      <br *ngIf="selecteursPage.length==0">
+      <div *ngIf="goodIndent==false" class="alert alert-warning" role="alert">
+        <h4 class="alert-heading">Warning !</h4>
+        <p>Bad Ident, you should retry with the good Ident.
+      </div>
+    </div>
+  </div>
+</div>
